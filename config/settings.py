@@ -23,10 +23,11 @@ SECRET_KEY = os.getenv(
 
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
-ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS",
-    "127.0.0.1,localhost"
-).split(",")
+ALLOWED_HOSTS = [
+    "book-library-system-8mpr.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 # =========================
