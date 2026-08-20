@@ -1,0 +1,523 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 35px 20px;
+    }
+
+    .hero {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .hero h1 {
+        margin: 0;
+        font-size: 34px;
+        color: #111827;
+    }
+
+    .hero p {
+        margin-top: 8px;
+        color: #6b7280;
+    }
+
+    .add-btn {
+        background: #111827;
+        color: white;
+        text-decoration: none;
+        padding: 13px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+    }
+
+    .add-btn:hover {
+        background: #374151;
+    }
+
+    /* SEARCH */
+
+    .filters {
+        background: white;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        margin-bottom: 30px;
+    }
+
+    .filter-form {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr auto;
+        gap: 12px;
+    }
+
+    .filter-form input,
+    .filter-form select {
+        padding: 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 9px;
+        font-size: 14px;
+        outline: none;
+    }
+
+    .filter-form input:focus,
+    .filter-form select:focus {
+        border-color: #6366f1;
+    }
+
+    .search-btn {
+        border: none;
+        background: #4f46e5;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 9px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .clear-btn {
+        text-decoration: none;
+        padding: 12px 18px;
+        border-radius: 9px;
+        background: #f3f4f6;
+        color: #374151;
+        text-align: center;
+    }
+
+    /* BOOK GRID */
+
+    .section-title {
+        font-size: 22px;
+        margin-bottom: 18px;
+        color: #111827;
+    }
+
+    .book-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 22px;
+    }
+
+    .book-card {
+        background: white;
+        border-radius: 18px;
+        padding: 22px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        transition: 0.2s;
+        border: 1px solid #f1f1f1;
+    }
+
+    .book-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+    }
+
+    .book-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .book-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #111827;
+        margin: 0;
+    }
+
+    .author {
+        color: #6b7280;
+        margin-top: 5px;
+        font-size: 14px;
+    }
+
+    .genre {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 5px 10px;
+        background: #eef2ff;
+        color: #4338ca;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* STATUS */
+
+    .status {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-to_read {
+        background: #fff7ed;
+        color: #c2410c;
+    }
+
+    .status-reading {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
+    .status-completed {
+        background: #ecfdf5;
+        color: #059669;
+    }
+
+    .description {
+        color: #4b5563;
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 15px 0;
+    }
+
+    /* AI SUMMARY */
+
+    .summary {
+        background: #f9fafb;
+        border-left: 4px solid #6366f1;
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 15px;
+        font-size: 13px;
+        color: #374151;
+        line-height: 1.6;
+    }
+
+    .summary-title {
+        font-weight: 700;
+        color: #4f46e5;
+        margin-bottom: 5px;
+    }
+
+    /* BUTTONS */
+
+    .actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 18px;
+    }
+
+    .action-btn {
+        flex: 1;
+        text-align: center;
+        padding: 9px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .edit {
+        background: #eef2ff;
+        color: #4338ca;
+    }
+
+    .delete {
+        background: #fef2f2;
+        color: #dc2626;
+        border: none;
+        cursor: pointer;
+    }
+
+    .ai-btn {
+        background: #111827;
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        margin-top: 10px;
+        font-weight: 600;
+    }
+
+    /* EMPTY */
+
+    .empty {
+        text-align: center;
+        background: white;
+        padding: 60px 20px;
+        border-radius: 18px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+    .empty h3 {
+        margin-bottom: 8px;
+    }
+
+    .empty p {
+        color: #6b7280;
+    }
+
+    @media (max-width: 800px) {
+        .filter-form {
+            grid-template-columns: 1fr;
+        }
+
+        .hero {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 18px;
+        }
+    }
+</style>
+
+
+<div class="dashboard">
+
+    <!-- HEADER -->
+
+    <div class="hero">
+
+        <div>
+            <h1>My Library 📚</h1>
+
+            <p>
+                Welcome back, {{ request.user.username }}.
+                Manage your personal collection.
+            </p>
+        </div>
+
+        <a href="{% url 'add_book' %}" class="add-btn">
+            + Add Book
+        </a>
+
+    </div>
+
+
+    <!-- FILTERS -->
+
+    <div class="filters">
+
+        <form method="GET" class="filter-form">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search by title or author..."
+                value="{{ search }}"
+            >
+
+            <select name="genre">
+
+                <option value="">All Genres</option>
+
+                {% for g in genres %}
+
+                    <option
+                        value="{{ g }}"
+                        {% if selected_genre == g %}selected{% endif %}
+                    >
+                        {{ g }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <select name="status">
+
+                <option value="">All Status</option>
+
+                <option
+                    value="to_read"
+                    {% if selected_status == "to_read" %}selected{% endif %}
+                >
+                    To Read
+                </option>
+
+                <option
+                    value="reading"
+                    {% if selected_status == "reading" %}selected{% endif %}
+                >
+                    Reading
+                </option>
+
+                <option
+                    value="completed"
+                    {% if selected_status == "completed" %}selected{% endif %}
+                >
+                    Completed
+                </option>
+
+            </select>
+
+
+            <button class="search-btn" type="submit">
+                Search
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="{% url 'dashboard' %}" class="clear-btn">
+            Clear Filters
+        </a>
+
+    </div>
+
+
+    <!-- BOOKS -->
+
+    <h2 class="section-title">
+        Your Books
+    </h2>
+
+
+    {% if books %}
+
+        <div class="book-grid">
+
+            {% for book in books %}
+
+                <div class="book-card">
+
+                    <div class="book-top">
+
+                        <div>
+
+                            <h3 class="book-title">
+                                {{ book.title }}
+                            </h3>
+
+                            <div class="author">
+                                by {{ book.author }}
+                            </div>
+
+                        </div>
+
+
+                        <span class="status status-{{ book.status }}">
+                            {{ book.get_status_display }}
+                        </span>
+
+                    </div>
+
+
+                    <span class="genre">
+                        {{ book.genre }}
+                    </span>
+
+
+                    {% if book.description %}
+
+                        <p class="description">
+                            {{ book.description|truncatewords:25 }}
+                        </p>
+
+                    {% endif %}
+
+
+                    {% if book.ai_summary %}
+
+                        <div class="summary">
+
+                            <div class="summary-title">
+                                ✨ AI Summary
+                            </div>
+
+                            {{ book.ai_summary }}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- AI BUTTON -->
+
+                    {% if not book.ai_summary %}
+
+                        <form
+                            method="POST"
+                            action="{% url 'generate_summary' book.id %}"
+                        >
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="ai-btn"
+                            >
+                                ✨ Generate AI Summary
+                            </button>
+
+                        </form>
+
+                    {% endif %}
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="actions">
+
+                        <a
+                            href="{% url 'edit_book' book.id %}"
+                            class="action-btn edit"
+                        >
+                            ✏️ Edit
+                        </a>
+
+
+                        <form
+                            method="POST"
+                            action="{% url 'delete_book' book.id %}"
+                            style="flex:1;"
+                            onsubmit="return confirm('Are you sure you want to delete this book?');"
+                        >
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="action-btn delete"
+                                style="width:100%;"
+                            >
+                                🗑 Delete
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+        <div class="empty">
+
+            <h3>📚 Your library is empty</h3>
+
+            <p>
+                Start building your personal library by adding your first book.
+            </p>
+
+            <br>
+
+            <a href="{% url 'add_book' %}" class="add-btn">
+                + Add Your First Book
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

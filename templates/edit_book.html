@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Book | Book Library{% endblock %}
+
+{% block content %}
+
+<div class="container" style="padding-top: 50px; max-width: 700px;">
+
+    <div class="auth-card">
+
+        <h1>Edit Book</h1>
+
+        <p class="subtitle">
+            Update the details of your book.
+        </p>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Book Title</label>
+
+                <input
+                    type="text"
+                    name="title"
+                    value="{{ book.title }}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Author</label>
+
+                <input
+                    type="text"
+                    name="author"
+                    value="{{ book.author }}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Genre</label>
+
+                <input
+                    type="text"
+                    name="genre"
+                    value="{{ book.genre }}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+
+                <textarea
+                    name="description"
+                    required
+                    style="
+                        width: 100%;
+                        min-height: 120px;
+                        padding: 13px;
+                        border: 1px solid #d1d5db;
+                        border-radius: 9px;
+                        resize: vertical;
+                    "
+                >{{ book.description }}</textarea>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Reading Status</label>
+
+                <select
+                    name="status"
+                    required
+                    style="
+                        width: 100%;
+                        padding: 13px;
+                        border: 1px solid #d1d5db;
+                        border-radius: 9px;
+                        background: white;
+                    "
+                >
+
+                    <option
+                        value="to_read"
+                        {% if book.status == "to_read" %}selected{% endif %}
+                    >
+                        To Read
+                    </option>
+
+                    <option
+                        value="reading"
+                        {% if book.status == "reading" %}selected{% endif %}
+                    >
+                        Reading
+                    </option>
+
+                    <option
+                        value="completed"
+                        {% if book.status == "completed" %}selected{% endif %}
+                    >
+                        Completed
+                    </option>
+
+                </select>
+
+            </div>
+
+            <button class="btn" type="submit">
+                Save Changes
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
